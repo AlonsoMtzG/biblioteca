@@ -4,7 +4,7 @@ import Image from 'next/image';
 
 export default function Home() {
   return (
-    <div>
+    <div className="w-screen h-screen">
       <Nav />
       <HomeBook />
     </div>
