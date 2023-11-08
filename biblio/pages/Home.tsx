@@ -3,7 +3,7 @@ import { Table } from '@/components/Table';
 
 export const HomeBook = () => {
   return (
-    <div className="flex justify-center">
+    <div className="flex gap-12">
       <Sidebar />
       <Table />
     </div>
