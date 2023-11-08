@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
-import { categories } from '../Sidebar';
 import { SearchInput } from './SearchInput';
+import { FilterSelect } from './FilterSelect';
 
 const data = [
   {
@@ -24,11 +24,6 @@ export const Table = () => {
   const columns = ['ID', 'Nombre', 'Categoría', 'Estado', 'Favoritos'];
 
   const [dataState, setDataState] = useState(data);
-  const [categorySelected, setCategorySelected] = useState();
-
-  const handleCategory = (e: any) => {
-    console.log(e.target.value);
-  };
 
   const handleFavorite = (idx: number) => {
     console.log('handle');
@@ -44,20 +39,7 @@ export const Table = () => {
   return (
     <div className="border-2">
       <div className="flex">
-        <label>Filtrar por:</label>
-        <select
-          className="text-red-600"
-          value={categorySelected}
-          onChange={handleCategory}
-        >
-          {categories.map((category) => {
-            return (
-              <option key={category} value={category}>
-                {category}
-              </option>
-            );
-          })}
-        </select>
+        <FilterSelect />
         <SearchInput />
       </div>
       <div>
