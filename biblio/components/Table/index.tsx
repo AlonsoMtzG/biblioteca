@@ -1,39 +1,20 @@
-'use client';
-import { useState } from 'react';
+import { useContext } from 'react';
+
+import { DataContext } from '@/context/DataProvider';
+
 import { SearchInput } from './SearchInput';
 import { FilterSelect } from './FilterSelect';
-
-const data = [
-  {
-    id: '5435435',
-    name: 'Casa de campo',
-    category: 'Casa',
-    status: 'Leído',
-    favorite: true,
-  },
-  {
-    id: '4823494',
-    name: 'Otro',
-    category: 'Casa',
-    status: 'Disponible',
-    favorite: false,
-  },
-];
+import { FavoriteButton } from '../FavoriteButton';
 
 export const Table = () => {
   const columns = ['ID', 'Nombre', 'Categoría', 'Estado', 'Favoritos'];
 
-  const [dataState, setDataState] = useState(data);
+  const { dataState, setDataState } = useContext(DataContext);
 
   const handleFavorite = (idx: number) => {
-    console.log('handle');
-    setDataState((prevState) => {
-      let newData = [...prevState];
-      newData[idx].favorite = !newData[idx].favorite;
-      console.log(newData);
-
-      return newData;
-    });
+    const newData = [...dataState];
+    newData[idx].favorite = !newData[idx].favorite;
+    setDataState(newData);
   };
 
   return (
@@ -63,9 +44,11 @@ export const Table = () => {
                 <td className="px-10 py-2">{category}</td>
                 <td className="px-10 py-2">{status}</td>
                 <td className="px-10 py-2">
-                  <button onClick={() => handleFavorite(idx)}>
-                    {favorite ? 'SI' : 'NO'}
-                  </button>
+                  <FavoriteButton
+                    size={25}
+                    status={favorite}
+                    onClick={() => handleFavorite(idx)}
+                  />
                 </td>
               </tr>
             );
