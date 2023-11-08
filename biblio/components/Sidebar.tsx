@@ -1,10 +1,4 @@
-export const categories = [
-  'Terror',
-  'Finanzas',
-  'Ciencia Ficción',
-  'Comedia',
-  'Infantiles',
-];
+import { categories } from '@/constants';
 
 export const Sidebar = () => {
   return (
