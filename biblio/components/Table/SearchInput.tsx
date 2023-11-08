@@ -4,7 +4,7 @@ import { useState } from 'react';
 export const SearchInput = () => {
   const [search, setSearch] = useState('');
 
-  const handleSearch = (e: any) => {
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
   };
 
