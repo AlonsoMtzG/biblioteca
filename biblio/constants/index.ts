@@ -6,3 +6,5 @@ export const categories = [
   'Comedia',
   'Infantiles',
 ];
+
+export const status = ['Por Leer', 'Leído', 'Leyendo', 'Favorito'];
