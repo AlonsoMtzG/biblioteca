@@ -1,15 +1,17 @@
 import { useContext } from 'react';
 
 import { DataContext } from '@/context/DataProvider';
+import { CategoryContext } from '@/context/CategoryProvider';
 
 import { SearchInput } from './SearchInput';
 import { FilterSelect } from './FilterSelect';
 import { FavoriteButton } from '../FavoriteButton';
 
 export const Table = () => {
-  const columns = ['ID', 'Nombre', 'Categoría', 'Estado', 'Favoritos'];
-
   const { dataState, setDataState } = useContext(DataContext);
+  const { categorySelected, setCategorySelected } = useContext(CategoryContext);
+
+  const columns = ['ID', 'Nombre', 'Categoría', 'Estado', 'Favoritos'];
 
   const handleFavorite = (idx: number) => {
     const newData = [...dataState];
@@ -20,7 +22,10 @@ export const Table = () => {
   return (
     <div>
       <div className="flex mb-5">
-        <FilterSelect />
+        <FilterSelect
+          categorySelected={categorySelected}
+          setCategorySelected={setCategorySelected}
+        />
         <SearchInput />
       </div>
       <table className="table-auto shadow-lg">

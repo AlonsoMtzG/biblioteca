@@ -1,4 +1,6 @@
-export const categories = [
+import { CategorySelect, Status } from '@/interfaces';
+
+export const categories: CategorySelect[] = [
   'Todos',
   'Terror',
   'Finanzas',
@@ -7,4 +9,4 @@ export const categories = [
   'Infantiles',
 ];
 
-export const status = ['Por Leer', 'Leído', 'Leyendo', 'Favorito'];
+export const status: Status[] = ['Por Leer', 'Leído', 'Leyendo'];

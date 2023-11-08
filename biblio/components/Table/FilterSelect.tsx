@@ -1,9 +1,17 @@
+import { Dispatch, SetStateAction } from 'react';
+
 import { categories } from '@/constants';
-import { useState } from 'react';
+import { CategorySelect } from '@/interfaces';
 
-export const FilterSelect = () => {
-  const [categorySelected, setCategorySelected] = useState();
+interface Props {
+  categorySelected: CategorySelect;
+  setCategorySelected: Dispatch<SetStateAction<CategorySelect>>;
+}
 
+export const FilterSelect = ({
+  categorySelected,
+  setCategorySelected,
+}: Props) => {
   const handleCategory = (e: any) => {
     setCategorySelected(e.target.value);
   };

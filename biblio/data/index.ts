@@ -10,9 +10,23 @@ export const initialData: Book[] = [
   },
   {
     id: '4823494',
-    name: 'Otro',
+    name: 'Otro Libro',
     category: 'Finanzas',
     status: 'Por Leer',
+    favorite: false,
+  },
+  {
+    id: '9846212',
+    name: 'Un Nuevo Libro',
+    category: 'Ciencia Ficción',
+    status: 'Por Leer',
+    favorite: true,
+  },
+  {
+    id: '12345678',
+    name: 'Libro 4',
+    category: 'Infantiles',
+    status: 'Leyendo',
     favorite: false,
   },
 ];
