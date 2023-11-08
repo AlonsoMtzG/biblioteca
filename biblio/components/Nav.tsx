@@ -12,7 +12,7 @@ export const Nav = () => {
   const path = usePathname();
 
   return (
-    <div className="flex border-2 justify-between py-5 px-14 items-center">
+    <div className="flex justify-between py-5 px-14 items-center shadow-lg">
       <span>LOGO</span>
       <ul className="flex gap-5">
         {routes.map((route) => (
@@ -24,7 +24,12 @@ export const Nav = () => {
                 : 'text-gray-400'
             }`}
           >
-            <Link href={route.path}>{route.name}</Link>
+            <Link
+              className="w-full h-full text-center cursor-pointer hover:text-blue-900"
+              href={route.path}
+            >
+              {route.name}
+            </Link>
           </li>
         ))}
       </ul>
