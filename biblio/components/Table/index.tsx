@@ -1,6 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { categories } from '../Sidebar';
+import { SearchInput } from './SearchInput';
 
 const data = [
   {
@@ -23,13 +24,7 @@ export const Table = () => {
   const columns = ['ID', 'Nombre', 'Categoría', 'Estado', 'Favoritos'];
 
   const [dataState, setDataState] = useState(data);
-
-  const [search, setSearch] = useState('');
   const [categorySelected, setCategorySelected] = useState();
-
-  const handleSearch = (e: any) => {
-    setSearch(e.target.value);
-  };
 
   const handleCategory = (e: any) => {
     console.log(e.target.value);
@@ -48,26 +43,23 @@ export const Table = () => {
 
   return (
     <div className="border-2">
-      <label>Filtrar por:</label>
-      <select
-        className="text-red-600"
-        value={categorySelected}
-        onChange={handleCategory}
-      >
-        {categories.map((category) => {
-          return (
-            <option key={category} value={category}>
-              {category}
-            </option>
-          );
-        })}
-      </select>
-      <input
-        type="text"
-        className="border-2 border-red-500 ml-5 text-red-500"
-        value={search}
-        onChange={handleSearch}
-      />
+      <div className="flex">
+        <label>Filtrar por:</label>
+        <select
+          className="text-red-600"
+          value={categorySelected}
+          onChange={handleCategory}
+        >
+          {categories.map((category) => {
+            return (
+              <option key={category} value={category}>
+                {category}
+              </option>
+            );
+          })}
+        </select>
+        <SearchInput />
+      </div>
       <div>
         <div className="flex border-b-2 justify-around">
           {columns.map((title) => {
