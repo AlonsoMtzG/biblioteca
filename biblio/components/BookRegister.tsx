@@ -1,5 +1,5 @@
 'use client';
-import { categories, status } from '@/constants';
+import { categories, statusOptions } from '@/constants';
 import { useState } from 'react';
 import { FavoriteButton } from './FavoriteButton';
 
@@ -15,7 +15,11 @@ export const BookRegister = () => {
       <div className="flex justify-between mb-8">
         <h2 className="font-bold">Alta de Libro</h2>
         <div className="flex gap-2 items-center">
-          <FavoriteButton size={25} status={false} />
+          <FavoriteButton
+            size={25}
+            status={false}
+            onClick={() => console.log('hello world')}
+          />
           <button className="bg-green-500 px-5 py-1 rounded-lg text-white font-semibold">
             Guardar
           </button>
@@ -84,7 +88,7 @@ export const BookRegister = () => {
             value={categorySelected}
             onChange={handleCategory}
           >
-            {status.map((value) => {
+            {statusOptions.map((value) => {
               return (
                 <option key={value} value={value}>
                   {value}
