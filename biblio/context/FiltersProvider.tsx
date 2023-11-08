@@ -1,6 +1,6 @@
 import { CategorySelect, StatusSelect } from '@/interfaces';
 import { Dispatch, SetStateAction, createContext, useState } from 'react';
-//  Context's value type
+//  Filters value type
 type FiltersContextType = {
   categorySelected: CategorySelect;
   setCategorySelected: Dispatch<SetStateAction<CategorySelect>>;
@@ -15,12 +15,12 @@ export const FiltersContext = createContext<FiltersContextType>({
   setStatusSelected: () => {},
 });
 
-//Props type for the provider component
+// Props type for the provider component
 interface Props {
   children: React.ReactNode | React.ReactNode[];
 }
 
-// Provider to handle the state of the category selected
+// Provider to handle the state of the filters (category & status) selected
 export const FiltersProvider = ({ children }: Props) => {
   const [categorySelected, setCategorySelected] =
     useState<CategorySelect>('Todos');
