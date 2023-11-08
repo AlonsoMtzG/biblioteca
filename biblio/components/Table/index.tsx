@@ -1,6 +1,6 @@
 'use client';
 import { useState } from 'react';
-import { categories } from './Sidebar';
+import { categories } from '../Sidebar';
 
 const data = [
   {
