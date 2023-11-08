@@ -1,5 +1,5 @@
 'use client';
-import { CategoryProvider } from '@/context/CategoryProvider';
+import { FiltersProvider } from '@/context/FiltersProvider';
 import { DataProvider } from '@/context/DataProvider';
 
 import { Sidebar } from '@/components/Sidebar';
@@ -8,12 +8,12 @@ import { Table } from '@/components/Table';
 export default function Home() {
   return (
     <DataProvider>
-      <CategoryProvider>
+      <FiltersProvider>
         <div className="w-full h-full flex gap-12">
           <Sidebar />
           <Table />
         </div>
-      </CategoryProvider>
+      </FiltersProvider>
     </DataProvider>
   );
 }

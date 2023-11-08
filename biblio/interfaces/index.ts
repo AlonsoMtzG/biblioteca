@@ -1,5 +1,7 @@
 export type Status = 'Por Leer' | 'Leído' | 'Leyendo';
 
+export type StatusSelect = 'Todos' | Status;
+
 export type Category =
   | 'Terror'
   | 'Finanzas'

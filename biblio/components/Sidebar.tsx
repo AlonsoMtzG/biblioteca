@@ -1,10 +1,10 @@
 import { useContext } from 'react';
 
-import { CategoryContext } from '@/context/CategoryProvider';
 import { categories } from '@/constants';
+import { FiltersContext } from '@/context/FiltersProvider';
 
 export const Sidebar = () => {
-  const { categorySelected, setCategorySelected } = useContext(CategoryContext);
+  const { categorySelected, setCategorySelected } = useContext(FiltersContext);
 
   return (
     <div className="flex flex-col w-56 shadow-xl text-blue-800 font-semibold">
