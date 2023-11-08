@@ -1,11 +1,10 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext } from 'react';
 
 import { DataContext } from '@/context/DataProvider';
 import { FiltersContext } from '@/context/FiltersProvider';
 
-import { Book } from '@/interfaces';
-import { filterByProperty } from '@/utils/filterByProperty';
 import { statusOptions } from '@/constants';
+import { useFilters } from '@/hooks/useFilters';
 
 import { SearchInput } from './SearchInput';
 import { FilterSelect } from './FilterSelect';
@@ -16,22 +15,17 @@ export const Table = () => {
   const { categorySelected, statusSelected, setStatusSelected } =
     useContext(FiltersContext);
 
-  const [filteredBooks, setFilteredBooks] = useState<Book[]>(dataState);
-
-  // Filter products by category or status
-  useEffect(() => {
-    let updatedData: Book[] = dataState;
-
-    if (categorySelected !== 'Todos') {
-      updatedData = filterByProperty('category', categorySelected, updatedData);
-    }
-
-    if (statusSelected !== 'Todos') {
-      updatedData = filterByProperty('status', statusSelected, updatedData);
-    }
-
-    setFilteredBooks(updatedData);
-  }, [categorySelected, statusSelected]);
+  //  Filter the data based on the selected category and status
+  const { filteredData } = useFilters(dataState, [
+    {
+      property: 'category',
+      state: categorySelected,
+    },
+    {
+      property: 'status',
+      state: statusSelected,
+    },
+  ]);
 
   const columns = ['ID', 'Nombre', 'Categoría', 'Estado', 'Favoritos'];
 
@@ -68,25 +62,23 @@ export const Table = () => {
           </tr>
         </thead>
         <tbody>
-          {filteredBooks.map(
-            ({ id, name, category, status, favorite }, idx) => {
-              return (
-                <tr key={id} className="border-b-2 font-medium">
-                  <td className="px-10 py-2 font-normal">{id}</td>
-                  <td className="px-10 py-2 text-blue-900">{name}</td>
-                  <td className="px-10 py-2">{category}</td>
-                  <td className="px-10 py-2">{status}</td>
-                  <td className="px-10 py-2">
-                    <FavoriteButton
-                      size={25}
-                      status={favorite}
-                      onClick={() => handleFavorite(idx)}
-                    />
-                  </td>
-                </tr>
-              );
-            }
-          )}
+          {filteredData.map(({ id, name, category, status, favorite }, idx) => {
+            return (
+              <tr key={id} className="border-b-2 font-medium">
+                <td className="px-10 py-2 font-normal">{id}</td>
+                <td className="px-10 py-2 text-blue-900">{name}</td>
+                <td className="px-10 py-2">{category}</td>
+                <td className="px-10 py-2">{status}</td>
+                <td className="px-10 py-2">
+                  <FavoriteButton
+                    size={25}
+                    status={favorite}
+                    onClick={() => handleFavorite(idx)}
+                  />
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </div>
