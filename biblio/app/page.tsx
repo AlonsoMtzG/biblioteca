@@ -1,9 +1,11 @@
-import { HomeBook } from '@/pages/Home';
+import { Sidebar } from '@/components/Sidebar';
+import { Table } from '@/components/Table';
 
 export default function Home() {
   return (
-    <div className="w-screen h-screen">
-      <HomeBook />
+    <div className="w-full h-full flex gap-12">
+      <Sidebar />
+      <Table />
     </div>
   );
 }
