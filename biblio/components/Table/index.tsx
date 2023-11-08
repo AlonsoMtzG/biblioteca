@@ -8,7 +8,7 @@ const data = [
     id: '5435435',
     name: 'Casa de campo',
     category: 'Casa',
-    status: 'Disponible',
+    status: 'Leído',
     favorite: true,
   },
   {
@@ -37,33 +37,41 @@ export const Table = () => {
   };
 
   return (
-    <div className="border-2">
-      <div className="flex">
+    <div>
+      <div className="flex mb-5">
         <FilterSelect />
         <SearchInput />
       </div>
-      <div>
-        <div className="flex border-b-2 justify-around">
-          {columns.map((title) => {
-            return <div key={title}>{title}</div>;
-          })}
-        </div>
-        <div className="flex flex-col">
+      <table className="table-auto shadow-lg">
+        <thead className="border-b-2 border-blue-900">
+          <tr>
+            {columns.map((title) => {
+              return (
+                <td key={title} className="text-gray-700 px-10 py-2">
+                  {title}
+                </td>
+              );
+            })}
+          </tr>
+        </thead>
+        <tbody>
           {dataState.map(({ id, name, category, status, favorite }, idx) => {
             return (
-              <div className="flex justify-around w-full" key={id}>
-                <div>{id}</div>
-                <div>{name}</div>
-                <div>{category}</div>
-                <div>{status}</div>
-                <button onClick={() => handleFavorite(idx)}>
-                  {favorite ? 'SI' : 'NO'}
-                </button>
-              </div>
+              <tr key={id} className="border-b-2 font-medium">
+                <td className="px-10 py-2 font-normal">{id}</td>
+                <td className="px-10 py-2 text-blue-900">{name}</td>
+                <td className="px-10 py-2">{category}</td>
+                <td className="px-10 py-2">{status}</td>
+                <td className="px-10 py-2">
+                  <button onClick={() => handleFavorite(idx)}>
+                    {favorite ? 'SI' : 'NO'}
+                  </button>
+                </td>
+              </tr>
             );
           })}
-        </div>
-      </div>
+        </tbody>
+      </table>
     </div>
   );
 };
