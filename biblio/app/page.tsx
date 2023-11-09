@@ -1,19 +1,20 @@
 'use client';
 import { FiltersProvider } from '@/context/FiltersProvider';
-import { DataProvider } from '@/context/DataProvider';
 
 import { Sidebar } from '@/components/Sidebar';
 import { Table } from '@/components/Table';
+import { useContext } from 'react';
+import { DataContext } from '@/context/DataProvider';
 
 export default function Home() {
+  const { dataState } = useContext(DataContext);
+
   return (
-    <DataProvider>
-      <FiltersProvider>
-        <div className="w-full h-full flex gap-12">
-          <Sidebar />
-          <Table />
-        </div>
-      </FiltersProvider>
-    </DataProvider>
+    <FiltersProvider>
+      <div className="w-full h-full flex gap-12">
+        <Sidebar />
+        <Table data={dataState} />
+      </div>
+    </FiltersProvider>
   );
 }

@@ -1,22 +1,19 @@
+'use client';
 import { initialData } from '@/data';
 import { Book } from '@/interfaces';
-import {
-  Dispatch,
-  SetStateAction,
-  createContext,
-  useContext,
-  useState,
-} from 'react';
+import { createContext, useMemo, useState } from 'react';
 
 //  Context's value type
 type DataContextType = {
   dataState: Book[];
-  setDataState: Dispatch<SetStateAction<Book[]>>;
+  favorites: Book[];
+  toggleFavorite: (id: string) => void;
 };
 
 export const DataContext = createContext<DataContextType>({
   dataState: [],
-  setDataState: () => {},
+  favorites: [],
+  toggleFavorite: () => {},
 });
 
 //Props type for the provider component
@@ -27,9 +24,29 @@ interface Props {
 export const DataProvider = ({ children }: Props) => {
   const [dataState, setDataState] = useState<Book[]>(initialData);
 
+  const favorites = useMemo(
+    () => dataState.filter((book) => book.favorite),
+    [dataState]
+  );
+
+  const toggleFavorite = (id: string) => {
+    let newDataState = [...dataState];
+    newDataState.map(
+      (item) => item.id === id && (item.favorite = !item.favorite)
+    );
+    setDataState(newDataState);
+  };
+
+  const contextValue = useMemo(
+    () => ({
+      dataState,
+      favorites,
+      toggleFavorite,
+    }),
+    [dataState, favorites, toggleFavorite]
+  );
+
   return (
-    <DataContext.Provider value={{ dataState, setDataState }}>
-      {children}
-    </DataContext.Provider>
+    <DataContext.Provider value={contextValue}>{children}</DataContext.Provider>
   );
 };
