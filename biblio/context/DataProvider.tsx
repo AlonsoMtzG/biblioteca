@@ -9,6 +9,7 @@ type DataContextType = {
   favorites: Book[];
   addBook: (newBook: Book) => void;
   updateBook: (updatedBook: Book) => void;
+  deleteBook: (id: string) => void;
   toggleFavorite: (id: string) => void;
 };
 
@@ -17,6 +18,7 @@ export const DataContext = createContext<DataContextType>({
   favorites: [],
   addBook: () => {},
   updateBook: () => {},
+  deleteBook: () => {},
   toggleFavorite: () => {},
 });
 
@@ -50,7 +52,9 @@ export const DataProvider = ({ children }: Props) => {
 
   // Delete a book from the state
   const deleteBook = (id: string) => {
-    setDataState((prev) => prev.filter((book) => book.id !== id));
+    setDataState((prevDataState) =>
+      prevDataState.filter((book) => book.id !== id)
+    );
   };
 
   // Toggle the favorite status of a book
@@ -68,6 +72,7 @@ export const DataProvider = ({ children }: Props) => {
       favorites,
       addBook,
       updateBook,
+      deleteBook,
       toggleFavorite,
     }),
     [dataState, favorites]

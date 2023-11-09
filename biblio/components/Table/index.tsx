@@ -20,7 +20,7 @@ interface Props {
 export const Table = ({ data }: Props) => {
   const { categorySelected, statusSelected, setStatusSelected } =
     useContext(FiltersContext);
-  const { toggleFavorite, updateBook } = useContext(DataContext);
+  const { toggleFavorite, updateBook, deleteBook } = useContext(DataContext);
 
   const [modal, setModal] = useState({ state: false, book: {} as Book });
 
@@ -59,7 +59,9 @@ export const Table = ({ data }: Props) => {
     updateBook(data);
   };
 
-  const handleDelete = (id: string) => {};
+  const handleDelete = (id: string) => {
+    deleteBook(id);
+  };
 
   return (
     <div className="flex flex-col">
