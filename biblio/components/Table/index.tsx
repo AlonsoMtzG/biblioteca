@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 
 import { FiltersContext } from '@/context/FiltersProvider';
 import { DataContext } from '@/context/DataProvider';
@@ -15,9 +15,10 @@ import { BookRegister } from '../BookRegister';
 
 interface Props {
   data: Book[];
+  showActions?: boolean;
 }
 
-export const Table = ({ data }: Props) => {
+export const Table = ({ data, showActions = false }: Props) => {
   const { categorySelected, statusSelected, setStatusSelected } =
     useContext(FiltersContext);
   const { toggleFavorite, updateBook, deleteBook } = useContext(DataContext);
@@ -103,14 +104,18 @@ export const Table = ({ data }: Props) => {
                       status={book.favorite}
                       onClick={() => handleToggleFavorite(book.id)}
                     />
-                    <ActionButton
-                      action="edit"
-                      onClick={() => setModal({ state: true, book: book })}
-                    />
-                    <ActionButton
-                      action="delete"
-                      onClick={() => handleDelete(book.id)}
-                    />
+                    {showActions && (
+                      <>
+                        <ActionButton
+                          action="edit"
+                          onClick={() => setModal({ state: true, book: book })}
+                        />
+                        <ActionButton
+                          action="delete"
+                          onClick={() => handleDelete(book.id)}
+                        />
+                      </>
+                    )}
                   </div>
                 </td>
               </tr>

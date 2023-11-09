@@ -13,7 +13,7 @@ export default function Home() {
     <FiltersProvider>
       <div className="w-full h-full flex gap-12">
         <Sidebar />
-        <Table data={dataState} />
+        <Table data={dataState} showActions />
       </div>
     </FiltersProvider>
   );
