@@ -7,7 +7,7 @@ export const Sidebar = () => {
   const { categorySelected, setCategorySelected } = useContext(FiltersContext);
 
   return (
-    <div className="flex flex-col w-56 shadow-xl text-blue-800 font-semibold">
+    <div className="flex flex-col h-fit w-56 shadow-xl text-blue-800 font-semibold">
       {categoriesOptions.map((category) => {
         return (
           <button
