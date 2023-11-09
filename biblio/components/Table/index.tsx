@@ -3,7 +3,8 @@ import { useContext } from 'react';
 import { DataContext } from '@/context/DataProvider';
 import { FiltersContext } from '@/context/FiltersProvider';
 
-import { statusOptions } from '@/constants';
+import { statusOptions, tableColumns } from '@/constants';
+import { StatusSelect } from '@/interfaces';
 import { useFilters } from '@/hooks/useFilters';
 
 import { SearchInput } from './SearchInput';
@@ -16,18 +17,20 @@ export const Table = () => {
     useContext(FiltersContext);
 
   //  Filter the data based on the selected category and status
-  const { filteredData } = useFilters(dataState, [
-    {
-      property: 'category',
-      state: categorySelected,
-    },
-    {
-      property: 'status',
-      state: statusSelected,
-    },
-  ]);
-
-  const columns = ['ID', 'Nombre', 'Categoría', 'Estado', 'Favoritos'];
+  const { filteredData, searchTerm, setSearchTerm } = useFilters(
+    dataState,
+    [
+      {
+        property: 'category',
+        state: categorySelected,
+      },
+      {
+        property: 'status',
+        state: statusSelected,
+      },
+    ],
+    ['name', 'id']
+  );
 
   const handleFavorite = (idx: number) => {
     const newData = [...dataState];
@@ -35,8 +38,12 @@ export const Table = () => {
     setDataState(newData);
   };
 
-  const handleFilterChange = (e: any) => {
-    setStatusSelected(e.target.value);
+  const handleFilterChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setStatusSelected(e.target.value as StatusSelect);
+  };
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value);
   };
 
   return (
@@ -47,12 +54,12 @@ export const Table = () => {
           onChange={handleFilterChange}
           options={statusOptions}
         />
-        <SearchInput />
+        <SearchInput value={searchTerm} onChange={handleSearchChange} />
       </div>
       <table className="table-auto shadow-lg">
         <thead className="border-b-2 border-blue-900">
           <tr>
-            {columns.map((title) => {
+            {tableColumns.map((title) => {
               return (
                 <td key={title} className="text-gray-700 px-10 py-2">
                   {title}

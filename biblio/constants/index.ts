@@ -15,3 +15,11 @@ export const statusOptions: StatusSelect[] = [
   'Leído',
   'Leyendo',
 ];
+
+export const tableColumns = [
+  'ID',
+  'Nombre',
+  'Categoría',
+  'Estado',
+  'Favoritos',
+];

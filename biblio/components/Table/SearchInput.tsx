@@ -1,13 +1,11 @@
-'use client';
-import { useState } from 'react';
+import { ChangeEventHandler } from 'react';
 
-export const SearchInput = () => {
-  const [search, setSearch] = useState('');
+interface Props {
+  value: string;
+  onChange: ChangeEventHandler<HTMLInputElement>;
+}
 
-  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearch(e.target.value);
-  };
-
+export const SearchInput = ({ value, onChange }: Props) => {
   return (
     <div className="flex items-center rounded-2xl px-2 py-1 bg-gray-100">
       <div className="text-gray-400 mr-2">
@@ -30,8 +28,8 @@ export const SearchInput = () => {
         type="text"
         placeholder="Buscar"
         className="bg-transparent focus:outline-none placeholder:text-gray-300"
-        value={search}
-        onChange={handleSearch}
+        value={value}
+        onChange={onChange}
       />
     </div>
   );
