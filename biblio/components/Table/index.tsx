@@ -13,6 +13,7 @@ import { BookRegister } from '../BookRegister';
 import { BookRow } from './BookRow';
 import { useBookActions } from '@/hooks/useBookActions';
 import { BookModal } from './BookModal';
+import { usePagination } from '@/hooks/usePagination';
 
 interface Props {
   data: Book[];
@@ -38,6 +39,13 @@ export const Table = ({ data, showActions = false }: Props) => {
 
   //  Filter the data based on the selected category and status
   const { filteredData } = useFilters(data, filters, searchKeys, searchTerm);
+
+  // Pagination for the filtered data
+  const itemsPerPage = 10; // Elements per page
+  const { currentData, currentPage, totalPages, setPage } = usePagination({
+    itemsPerPage,
+    data: filteredData,
+  });
 
   // Handle the filter change
   const handleFilterChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -72,7 +80,7 @@ export const Table = ({ data, showActions = false }: Props) => {
           </tr>
         </thead>
         <tbody>
-          {filteredData.map((book) => {
+          {currentData.map((book) => {
             return (
               <BookRow
                 key={book.id}
@@ -86,6 +94,34 @@ export const Table = ({ data, showActions = false }: Props) => {
           })}
         </tbody>
       </table>
+      <div className="pagination flex justify-center items-center mt-4">
+        <button
+          onClick={() => setPage(currentPage - 1)}
+          disabled={currentPage === 1}
+          className="p-2 border rounded text-sm mx-1"
+        >
+          Anterior
+        </button>
+        {Array.from({ length: totalPages }, (_, i) => i + 1).map((number) => (
+          <button
+            key={number}
+            onClick={() => setPage(number)}
+            disabled={number === currentPage}
+            className={`p-2 border rounded text-sm mx-1 ${
+              number === currentPage ? 'bg-blue-500 text-white' : ''
+            }`}
+          >
+            {number}
+          </button>
+        ))}
+        <button
+          onClick={() => setPage(currentPage + 1)}
+          disabled={currentPage === totalPages}
+          className="p-2 border rounded text-sm mx-1"
+        >
+          Siguiente
+        </button>
+      </div>
       <BookModal
         onClose={() => setModal({ isOpen: false, book: {} as Book })}
         isOpen={modal.isOpen}
