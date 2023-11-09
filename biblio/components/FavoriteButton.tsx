@@ -1,3 +1,5 @@
+import { ButtonHTMLAttributes } from 'react';
+
 const Star = ({ size }: { size: number }) => {
   return (
     <svg
@@ -34,15 +36,14 @@ const StarFilled = ({ size }: { size: number }) => {
   );
 };
 
-interface Props {
+interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
   size?: number;
   status: boolean;
-  onClick: () => void;
 }
 
-export const FavoriteButton = ({ size = 20, status, onClick }: Props) => {
+export const FavoriteButton = ({ size = 20, status, ...rest }: Props) => {
   return (
-    <button className=" text-amber-500" onClick={onClick}>
+    <button className=" text-amber-500" {...rest}>
       {status ? <StarFilled size={size} /> : <Star size={size} />}
     </button>
   );

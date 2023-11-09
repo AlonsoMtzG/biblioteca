@@ -7,12 +7,14 @@ import { createContext, useMemo, useState } from 'react';
 type DataContextType = {
   dataState: Book[];
   favorites: Book[];
+  addBook: (newBook: Book) => void;
   toggleFavorite: (id: string) => void;
 };
 
 export const DataContext = createContext<DataContextType>({
   dataState: [],
   favorites: [],
+  addBook: () => {},
   toggleFavorite: () => {},
 });
 
@@ -29,6 +31,23 @@ export const DataProvider = ({ children }: Props) => {
     [dataState]
   );
 
+  // Add a new book to the state
+  const addBook = async (newBook: Book) => {
+    setDataState((prev) => [...prev, newBook]);
+  };
+
+  // Update a book in the state
+  const updateBook = (updatedBook: Book) => {
+    setDataState((prev) =>
+      prev.map((book) => (book.id === updatedBook.id ? updatedBook : book))
+    );
+  };
+
+  // Delete a book from the state
+  const deleteBook = (id: string) => {
+    setDataState((prev) => prev.filter((book) => book.id !== id));
+  };
+
   const toggleFavorite = (id: string) => {
     let newDataState = [...dataState];
     newDataState.map(
@@ -41,9 +60,10 @@ export const DataProvider = ({ children }: Props) => {
     () => ({
       dataState,
       favorites,
+      addBook,
       toggleFavorite,
     }),
-    [dataState, favorites, toggleFavorite]
+    [dataState, favorites, addBook, toggleFavorite]
   );
 
   return (

@@ -15,6 +15,7 @@ export interface Book {
   id: string;
   name: string;
   category: Category;
+  description: string;
   status: Status;
   favorite: boolean;
 }
