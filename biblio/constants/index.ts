@@ -16,10 +16,4 @@ export const statusOptions: StatusSelect[] = [
   'Leyendo',
 ];
 
-export const tableColumns = [
-  'ID',
-  'Nombre',
-  'Categoría',
-  'Estado',
-  'Favoritos',
-];
+export const tableColumns = ['ID', 'Nombre', 'Categoría', 'Estado', 'Acciones'];

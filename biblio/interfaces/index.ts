@@ -14,6 +14,7 @@ export type CategorySelect = 'Todos' | Category;
 export interface Book {
   id: string;
   name: string;
+  author: string;
   category: Category;
   description: string;
   status: Status;

@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 
 import { FiltersContext } from '@/context/FiltersProvider';
 import { DataContext } from '@/context/DataProvider';
@@ -10,6 +10,8 @@ import { useFilters } from '@/hooks/useFilters';
 import { SearchInput } from './SearchInput';
 import { FilterSelect } from './FilterSelect';
 import { FavoriteButton } from '../FavoriteButton';
+import { ActionButton } from './ActionButton';
+import { BookRegister } from '../BookRegister';
 
 interface Props {
   data: Book[];
@@ -18,11 +20,14 @@ interface Props {
 export const Table = ({ data }: Props) => {
   const { categorySelected, statusSelected, setStatusSelected } =
     useContext(FiltersContext);
+  const { toggleFavorite, updateBook } = useContext(DataContext);
 
-  const { toggleFavorite } = useContext(DataContext);
+  const [modal, setModal] = useState({ state: false, book: {} as Book });
+
+  const [searchTerm, setSearchTerm] = useState('');
 
   //  Filter the data based on the selected category and status
-  const { filteredData, searchTerm, setSearchTerm } = useFilters(
+  const { filteredData } = useFilters(
     data,
     [
       {
@@ -34,7 +39,8 @@ export const Table = ({ data }: Props) => {
         state: statusSelected,
       },
     ],
-    ['name', 'id']
+    ['name', 'id'],
+    searchTerm
   );
 
   const handleFilterChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -49,8 +55,14 @@ export const Table = ({ data }: Props) => {
     toggleFavorite(id);
   };
 
+  const handleEdit = (data: Book) => {
+    updateBook(data);
+  };
+
+  const handleDelete = (id: string) => {};
+
   return (
-    <div>
+    <div className="flex flex-col">
       <div className="flex mb-5">
         <FilterSelect
           value={statusSelected}
@@ -72,25 +84,58 @@ export const Table = ({ data }: Props) => {
           </tr>
         </thead>
         <tbody>
-          {filteredData.map(({ id, name, category, status, favorite }) => {
+          {filteredData.map((book) => {
             return (
-              <tr key={id} className="border-b-2 font-medium">
-                <td className="px-10 py-2 font-normal">{id}</td>
-                <td className="px-10 py-2 text-blue-900">{name}</td>
-                <td className="px-10 py-2">{category}</td>
-                <td className="px-10 py-2">{status}</td>
+              <tr
+                key={book.id}
+                className="border-b-2 font-medium relative group"
+              >
+                <td className="px-10 py-2 font-normal">{book.id}</td>
+                <td className="px-10 py-2 text-blue-900">{book.name}</td>
+                <td className="px-10 py-2">{book.category}</td>
+                <td className="px-10 py-2">{book.status}</td>
                 <td className="px-10 py-2">
-                  <FavoriteButton
-                    size={25}
-                    status={favorite}
-                    onClick={() => handleToggleFavorite(id)}
-                  />
+                  <div className="flex gap-2">
+                    <FavoriteButton
+                      size={25}
+                      status={book.favorite}
+                      onClick={() => handleToggleFavorite(book.id)}
+                    />
+                    <ActionButton
+                      action="edit"
+                      onClick={() => setModal({ state: true, book: book })}
+                    />
+                    <ActionButton
+                      action="delete"
+                      onClick={() => handleDelete(book.id)}
+                    />
+                  </div>
                 </td>
               </tr>
             );
           })}
         </tbody>
       </table>
+      {
+        // Display the modal if modalOpened is true
+        modal.state && (
+          <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex flex-col gap-5 justify-center items-center">
+            <BookRegister
+              data={modal.book}
+              saveAction={'edit'}
+              onSubmit={handleEdit}
+              onClose={() => setModal({ state: false, book: {} as Book })}
+            />
+            <button
+              type="button"
+              className="bg-red-500 px-7 py-1 rounded-lg text-white font-semibold"
+              onClick={() => setModal({ state: false, book: {} as Book })}
+            >
+              Cancelar
+            </button>
+          </div>
+        )
+      }
     </div>
   );
 };

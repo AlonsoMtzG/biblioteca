@@ -10,10 +10,15 @@ type Filter = {
 export const useFilters = (
   initialState: any[], // Initial data
   filters: Filter[], // Filters array
-  keys: string[] // Properties to search
+  keys: string[], // Properties to search
+  searchTerm: string // Search term
 ) => {
   const [filteredData, setFilteredData] = useState<any[]>(initialState);
-  const [searchTerm, setSearchTerm] = useState('');
+
+  useEffect(() => {
+    // Update filtered data when initial data changes (change in the data context)
+    setFilteredData(initialState);
+  }, [initialState]);
 
   // Dependency list based on filter states
   const filterStates = filters.map((filter) => filter.state).concat(searchTerm);
@@ -50,5 +55,5 @@ export const useFilters = (
     setFilteredData(updatedData);
   }, filterStates);
 
-  return { filteredData, searchTerm, setSearchTerm };
+  return { filteredData };
 };

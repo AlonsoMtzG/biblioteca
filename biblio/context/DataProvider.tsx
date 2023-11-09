@@ -8,6 +8,7 @@ type DataContextType = {
   dataState: Book[];
   favorites: Book[];
   addBook: (newBook: Book) => void;
+  updateBook: (updatedBook: Book) => void;
   toggleFavorite: (id: string) => void;
 };
 
@@ -15,6 +16,7 @@ export const DataContext = createContext<DataContextType>({
   dataState: [],
   favorites: [],
   addBook: () => {},
+  updateBook: () => {},
   toggleFavorite: () => {},
 });
 
@@ -26,6 +28,7 @@ interface Props {
 export const DataProvider = ({ children }: Props) => {
   const [dataState, setDataState] = useState<Book[]>(initialData);
 
+  // Get the favorites from the state
   const favorites = useMemo(
     () => dataState.filter((book) => book.favorite),
     [dataState]
@@ -38,9 +41,11 @@ export const DataProvider = ({ children }: Props) => {
 
   // Update a book in the state
   const updateBook = (updatedBook: Book) => {
-    setDataState((prev) =>
-      prev.map((book) => (book.id === updatedBook.id ? updatedBook : book))
-    );
+    setDataState((prevDataState) => {
+      return prevDataState.map((item) =>
+        item.id === updatedBook.id ? { ...updatedBook } : item
+      );
+    });
   };
 
   // Delete a book from the state
@@ -48,12 +53,13 @@ export const DataProvider = ({ children }: Props) => {
     setDataState((prev) => prev.filter((book) => book.id !== id));
   };
 
+  // Toggle the favorite status of a book
   const toggleFavorite = (id: string) => {
-    let newDataState = [...dataState];
-    newDataState.map(
-      (item) => item.id === id && (item.favorite = !item.favorite)
+    setDataState((prevDataState) =>
+      prevDataState.map((book) =>
+        book.id === id ? { ...book, favorite: !book.favorite } : book
+      )
     );
-    setDataState(newDataState);
   };
 
   const contextValue = useMemo(
@@ -61,9 +67,10 @@ export const DataProvider = ({ children }: Props) => {
       dataState,
       favorites,
       addBook,
+      updateBook,
       toggleFavorite,
     }),
-    [dataState, favorites, addBook, toggleFavorite]
+    [dataState, favorites]
   );
 
   return (
