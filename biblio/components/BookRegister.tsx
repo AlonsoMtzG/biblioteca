@@ -1,30 +1,41 @@
 'use client';
 import { useContext, useState } from 'react';
-import { useRouter } from 'next/navigation';
 
 import { categories, statusOptions } from '@/constants';
 import { DataContext } from '@/context/DataProvider';
-import { Book } from '@/interfaces';
+import { Book, Category, Status } from '@/interfaces';
 
 import { FavoriteButton } from './FavoriteButton';
 
-export const BookRegister = () => {
-  const router = useRouter();
-  const { addBook } = useContext(DataContext);
+interface Props {
+  data?: Book;
+  saveAction: 'edit' | 'add';
+  onSubmit: (book: Book) => void;
+  onClose: () => void;
+}
 
-  const [favorite, setFavorite] = useState(false);
+export const BookRegister = ({ data, onSubmit, onClose }: Props) => {
+  const [author, setAuthor] = useState(data?.author || '');
+  const [title, setTitle] = useState(data?.name || '');
+  const [description, setDescription] = useState(data?.description || '');
+  const [category, setCategory] = useState<Category>(
+    data?.category || 'Ciencia Ficción'
+  );
+  const [status, setStatus] = useState<Status>(data?.status || 'Por Leer');
+  const [favorite, setFavorite] = useState(data?.favorite || false);
 
-  const handleSubmit = (formData: any) => {
-    addBook({
-      id: crypto.randomUUID(),
-      name: formData.get('title'),
-      category: formData.get('category'),
-      description: formData.get('description'),
-      status: formData.get('status'),
-      favorite: formData.get('favorite') === 'on',
-    } as Book);
+  const handleSubmit = () => {
+    onSubmit({
+      id: data?.id || crypto.randomUUID(),
+      author,
+      name: title,
+      description,
+      category,
+      status,
+      favorite,
+    });
 
-    router.push('/');
+    onClose();
   };
 
   const handleFavorite = () => {
@@ -74,6 +85,8 @@ export const BookRegister = () => {
             name="author"
             type="text"
             placeholder="Ingresa el nombre del autor"
+            value={author}
+            onChange={(e) => setAuthor(e.target.value)}
             className="px-2 py-1 rounded-md w-full focus:outline-gray-300 placeholder:text-gray-300"
           />
         </div>
@@ -87,6 +100,8 @@ export const BookRegister = () => {
             name="title"
             type="text"
             placeholder="Escribe el título del libro"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
             className="px-2 py-1 rounded-md w-full focus:outline-gray-300 placeholder:text-gray-300"
           />
         </div>
@@ -99,6 +114,8 @@ export const BookRegister = () => {
             rows={8}
             id="description"
             name="description"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
             placeholder="Proporciona una breve descripción"
             className="px-2 py-1 rounded-md w-full resize-none focus:outline-gray-300 placeholder:text-gray-300"
           ></textarea>
@@ -111,6 +128,8 @@ export const BookRegister = () => {
             required
             id="category"
             name="category"
+            value={category}
+            onChange={(e) => setCategory(e.target.value as any)}
             className="rounded-md px-2 py-1 w-full  focus:outline-gray-300 "
           >
             {categories.map((category) => {
@@ -130,6 +149,8 @@ export const BookRegister = () => {
             required
             id="status"
             name="status"
+            value={status}
+            onChange={(e) => setStatus(e.target.value as any)}
             className="rounded-md px-2 py-1 w-full focus:outline-gray-300"
           >
             {statusOptions.map((value) => {
