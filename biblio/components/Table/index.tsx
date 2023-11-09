@@ -9,9 +9,9 @@ import { useFilters } from '@/hooks/useFilters';
 
 import { SearchInput } from './SearchInput';
 import { FilterSelect } from './FilterSelect';
-import { FavoriteButton } from '../FavoriteButton';
-import { ActionButton } from './ActionButton';
 import { BookRegister } from '../BookRegister';
+import { BookRow } from './BookRow';
+import { useBookActions } from '@/hooks/useBookActions';
 
 interface Props {
   data: Book[];
@@ -21,47 +21,31 @@ interface Props {
 export const Table = ({ data, showActions = false }: Props) => {
   const { categorySelected, statusSelected, setStatusSelected } =
     useContext(FiltersContext);
-  const { dispatch } = useContext(DataContext);
+  const { toggleFavorite, updateBook, deleteBook } = useBookActions();
 
-  const [modal, setModal] = useState({ state: false, book: {} as Book });
-
+  const [modal, setModal] = useState({ isOpen: false, book: {} as Book });
   const [searchTerm, setSearchTerm] = useState('');
 
-  //  Filter the data based on the selected category and status
-  const { filteredData } = useFilters(
-    data,
-    [
-      {
-        property: 'category',
-        state: categorySelected,
-      },
-      {
-        property: 'status',
-        state: statusSelected,
-      },
-    ],
-    ['name', 'id'],
-    searchTerm
-  );
+  // Filters to be applied
+  const filters = [
+    { property: 'category', state: categorySelected },
+    { property: 'status', state: statusSelected },
+  ];
 
+  // Properties to be searched
+  const searchKeys = ['name', 'author'];
+
+  //  Filter the data based on the selected category and status
+  const { filteredData } = useFilters(data, filters, searchKeys, searchTerm);
+
+  // Handle the filter change
   const handleFilterChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setStatusSelected(e.target.value as StatusSelect);
   };
 
+  // Handle the search input change
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
-  };
-
-  const handleToggleFavorite = (bookId: string) => {
-    dispatch({ type: 'TOGGLE_FAVORITE', id: bookId });
-  };
-
-  const handleEdit = (updatedBook: Book) => {
-    dispatch({ type: 'UPDATE_BOOK', book: updatedBook });
-  };
-
-  const handleDelete = (bookId: string) => {
-    dispatch({ type: 'DELETE_BOOK', id: bookId });
   };
 
   return (
@@ -89,54 +73,35 @@ export const Table = ({ data, showActions = false }: Props) => {
         <tbody>
           {filteredData.map((book) => {
             return (
-              <tr
+              <BookRow
                 key={book.id}
-                className="border-b-2 font-medium relative group"
-              >
-                <td className="px-10 py-2 font-normal">{book.id}</td>
-                <td className="px-10 py-2 text-blue-900">{book.name}</td>
-                <td className="px-10 py-2">{book.category}</td>
-                <td className="px-10 py-2">{book.status}</td>
-                <td className="px-10 py-2">
-                  <div className="flex gap-2">
-                    <FavoriteButton
-                      size={25}
-                      status={book.favorite}
-                      onClick={() => handleToggleFavorite(book.id)}
-                    />
-                    {showActions && (
-                      <>
-                        <ActionButton
-                          action="edit"
-                          onClick={() => setModal({ state: true, book: book })}
-                        />
-                        <ActionButton
-                          action="delete"
-                          onClick={() => handleDelete(book.id)}
-                        />
-                      </>
-                    )}
-                  </div>
-                </td>
-              </tr>
+                book={book}
+                onEdit={() => setModal({ isOpen: true, book })}
+                onDelete={deleteBook}
+                onToggleFavorite={toggleFavorite}
+                showActions={showActions}
+              />
             );
           })}
         </tbody>
       </table>
       {
         // Display the modal if modalOpened is true
-        modal.state && (
+        modal.isOpen && (
           <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex flex-col gap-5 justify-center items-center">
             <BookRegister
               data={modal.book}
               saveAction={'edit'}
-              onSubmit={handleEdit}
-              onClose={() => setModal({ state: false, book: {} as Book })}
+              onSubmit={(updatedBook) => {
+                updateBook(updatedBook);
+                setModal({ isOpen: false, book: {} as Book });
+              }}
+              onClose={() => setModal({ isOpen: false, book: {} as Book })}
             />
             <button
               type="button"
               className="bg-red-500 px-7 py-1 rounded-lg text-white font-semibold"
-              onClick={() => setModal({ state: false, book: {} as Book })}
+              onClick={() => setModal({ isOpen: false, book: {} as Book })}
             >
               Cancelar
             </button>
