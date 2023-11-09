@@ -12,6 +12,7 @@ import { FilterSelect } from './FilterSelect';
 import { BookRegister } from '../BookRegister';
 import { BookRow } from './BookRow';
 import { useBookActions } from '@/hooks/useBookActions';
+import { BookModal } from './BookModal';
 
 interface Props {
   data: Book[];
@@ -85,29 +86,20 @@ export const Table = ({ data, showActions = false }: Props) => {
           })}
         </tbody>
       </table>
-      {
-        // Display the modal if modalOpened is true
-        modal.isOpen && (
-          <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex flex-col gap-5 justify-center items-center">
-            <BookRegister
-              data={modal.book}
-              saveAction={'edit'}
-              onSubmit={(updatedBook) => {
-                updateBook(updatedBook);
-                setModal({ isOpen: false, book: {} as Book });
-              }}
-              onClose={() => setModal({ isOpen: false, book: {} as Book })}
-            />
-            <button
-              type="button"
-              className="bg-red-500 px-7 py-1 rounded-lg text-white font-semibold"
-              onClick={() => setModal({ isOpen: false, book: {} as Book })}
-            >
-              Cancelar
-            </button>
-          </div>
-        )
-      }
+      <BookModal
+        onClose={() => setModal({ isOpen: false, book: {} as Book })}
+        isOpen={modal.isOpen}
+      >
+        <BookRegister
+          data={modal.book}
+          saveAction={'edit'}
+          onSubmit={(updatedBook) => {
+            updateBook(updatedBook);
+            setModal({ isOpen: false, book: {} as Book });
+          }}
+          onClose={() => setModal({ isOpen: false, book: {} as Book })}
+        />
+      </BookModal>
     </div>
   );
 };
