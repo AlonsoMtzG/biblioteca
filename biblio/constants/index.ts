@@ -1,6 +1,6 @@
 import { CategorySelect, StatusSelect } from '@/interfaces';
 
-export const categories: CategorySelect[] = [
+export const categoriesOptions: CategorySelect[] = [
   'Todos',
   'Terror',
   'Finanzas',

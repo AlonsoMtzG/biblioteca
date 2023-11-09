@@ -1,7 +1,7 @@
 'use client';
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 
-import { categories, statusOptions } from '@/constants';
+import { categoriesOptions, statusOptions } from '@/constants';
 import { DataContext } from '@/context/DataProvider';
 import { Book, Category, Status } from '@/interfaces';
 
@@ -132,7 +132,7 @@ export const BookRegister = ({ data, onSubmit, onClose }: Props) => {
             onChange={(e) => setCategory(e.target.value as any)}
             className="rounded-md px-2 py-1 w-full  focus:outline-gray-300 "
           >
-            {categories.map((category) => {
+            {categoriesOptions.slice(1).map((category) => {
               return (
                 <option key={category} value={category}>
                   {category}
@@ -153,7 +153,7 @@ export const BookRegister = ({ data, onSubmit, onClose }: Props) => {
             onChange={(e) => setStatus(e.target.value as any)}
             className="rounded-md px-2 py-1 w-full focus:outline-gray-300"
           >
-            {statusOptions.map((value) => {
+            {statusOptions.slice(1).map((value) => {
               return (
                 <option key={value} value={value}>
                   {value}

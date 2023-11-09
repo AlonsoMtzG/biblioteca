@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 
-import { categories } from '@/constants';
+import { categoriesOptions } from '@/constants';
 import { FiltersContext } from '@/context/FiltersProvider';
 
 export const Sidebar = () => {
@@ -8,7 +8,7 @@ export const Sidebar = () => {
 
   return (
     <div className="flex flex-col w-56 shadow-xl text-blue-800 font-semibold">
-      {categories.map((category) => {
+      {categoriesOptions.map((category) => {
         return (
           <button
             key={category}
