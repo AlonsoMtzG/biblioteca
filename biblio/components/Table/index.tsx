@@ -21,7 +21,7 @@ interface Props {
 export const Table = ({ data, showActions = false }: Props) => {
   const { categorySelected, statusSelected, setStatusSelected } =
     useContext(FiltersContext);
-  const { toggleFavorite, updateBook, deleteBook } = useContext(DataContext);
+  const { dispatch } = useContext(DataContext);
 
   const [modal, setModal] = useState({ state: false, book: {} as Book });
 
@@ -52,16 +52,16 @@ export const Table = ({ data, showActions = false }: Props) => {
     setSearchTerm(e.target.value);
   };
 
-  const handleToggleFavorite = (id: string) => {
-    toggleFavorite(id);
+  const handleToggleFavorite = (bookId: string) => {
+    dispatch({ type: 'TOGGLE_FAVORITE', id: bookId });
   };
 
-  const handleEdit = (data: Book) => {
-    updateBook(data);
+  const handleEdit = (updatedBook: Book) => {
+    dispatch({ type: 'UPDATE_BOOK', book: updatedBook });
   };
 
-  const handleDelete = (id: string) => {
-    deleteBook(id);
+  const handleDelete = (bookId: string) => {
+    dispatch({ type: 'DELETE_BOOK', id: bookId });
   };
 
   return (

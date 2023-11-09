@@ -7,10 +7,10 @@ import { useContext } from 'react';
 
 export default function New() {
   const router = useRouter();
-  const { addBook } = useContext(DataContext);
+  const { dispatch } = useContext(DataContext);
 
-  const handleAddBook = (data: Book) => {
-    addBook(data);
+  const handleAddBook = (newBook: Book) => {
+    dispatch({ type: 'ADD_BOOK', book: newBook });
   };
 
   return (

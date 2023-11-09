@@ -1,34 +1,55 @@
 'use client';
 import { initialData } from '@/data';
 import { Book } from '@/interfaces';
-import { createContext, useMemo, useState } from 'react';
+import React, { useReducer, createContext, useMemo } from 'react';
 
-//  Context's value type
+// Context's value type
 type DataContextType = {
   dataState: Book[];
   favorites: Book[];
-  addBook: (newBook: Book) => void;
-  updateBook: (updatedBook: Book) => void;
-  deleteBook: (id: string) => void;
-  toggleFavorite: (id: string) => void;
+  dispatch: React.Dispatch<Action>;
 };
 
 export const DataContext = createContext<DataContextType>({
   dataState: [],
   favorites: [],
-  addBook: () => {},
-  updateBook: () => {},
-  deleteBook: () => {},
-  toggleFavorite: () => {},
+  dispatch: () => null,
 });
 
-//Props type for the provider component
+// Action types for the reducer
+type Action =
+  | { type: 'ADD_BOOK'; book: Book }
+  | { type: 'UPDATE_BOOK'; book: Book }
+  | { type: 'DELETE_BOOK'; id: string }
+  | { type: 'TOGGLE_FAVORITE'; id: string };
+
+// Reducer function
+function booksReducer(state: Book[], action: Action): Book[] {
+  switch (action.type) {
+    case 'ADD_BOOK':
+      return [...state, action.book];
+    case 'UPDATE_BOOK':
+      return state.map((book) =>
+        book.id === action.book.id ? { ...action.book } : book
+      );
+    case 'DELETE_BOOK':
+      return state.filter((book) => book.id !== action.id);
+    case 'TOGGLE_FAVORITE':
+      return state.map((book) =>
+        book.id === action.id ? { ...book, favorite: !book.favorite } : book
+      );
+    default:
+      return state;
+  }
+}
+
+// Props type for the provider component
 interface Props {
-  children: React.ReactNode | React.ReactNode[];
+  children: React.ReactNode;
 }
 
 export const DataProvider = ({ children }: Props) => {
-  const [dataState, setDataState] = useState<Book[]>(initialData);
+  const [dataState, dispatch] = useReducer(booksReducer, initialData);
 
   // Get the favorites from the state
   const favorites = useMemo(
@@ -36,44 +57,11 @@ export const DataProvider = ({ children }: Props) => {
     [dataState]
   );
 
-  // Add a new book to the state
-  const addBook = async (newBook: Book) => {
-    setDataState((prev) => [...prev, newBook]);
-  };
-
-  // Update a book in the state
-  const updateBook = (updatedBook: Book) => {
-    setDataState((prevDataState) => {
-      return prevDataState.map((item) =>
-        item.id === updatedBook.id ? { ...updatedBook } : item
-      );
-    });
-  };
-
-  // Delete a book from the state
-  const deleteBook = (id: string) => {
-    setDataState((prevDataState) =>
-      prevDataState.filter((book) => book.id !== id)
-    );
-  };
-
-  // Toggle the favorite status of a book
-  const toggleFavorite = (id: string) => {
-    setDataState((prevDataState) =>
-      prevDataState.map((book) =>
-        book.id === id ? { ...book, favorite: !book.favorite } : book
-      )
-    );
-  };
-
   const contextValue = useMemo(
     () => ({
       dataState,
       favorites,
-      addBook,
-      updateBook,
-      deleteBook,
-      toggleFavorite,
+      dispatch,
     }),
     [dataState, favorites]
   );
