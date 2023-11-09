@@ -12,9 +12,9 @@ export const Nav = () => {
   const path = usePathname();
 
   return (
-    <div className="flex justify-between py-5 px-14 items-center shadow-lg">
-      <span>LOGO</span>
-      <ul className="flex gap-5">
+    <div className="flex justify-between w-full py-5 px-14 items-center shadow-lg">
+      <span className="hidden md:flex">LOGO</span>
+      <ul className="flex gap-5 justify-between">
         {routes.map((route) => (
           <li
             key={route.name}
@@ -33,7 +33,9 @@ export const Nav = () => {
           </li>
         ))}
       </ul>
-      <p className="font-bold text-blue-900">Luis Orlando Ortega</p>
+      <p className="font-bold text-blue-900 hidden md:flex">
+        Luis Orlando Ortega
+      </p>
     </div>
   );
 };

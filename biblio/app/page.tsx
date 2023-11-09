@@ -11,7 +11,7 @@ export default function Home() {
 
   return (
     <FiltersProvider>
-      <div className="w-full h-full flex gap-12">
+      <div className="w-full h-full flex flex-col md:flex-row gap-12">
         <Sidebar />
         <Table data={dataState} showActions />
       </div>
