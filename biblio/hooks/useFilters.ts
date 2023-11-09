@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { filterByProperty } from '@/utils/filterByProperty';
 
 type Filter = {
   property: string; // Property to filter
@@ -25,34 +24,25 @@ export const useFilters = (
 
   // Filter data by filters
   useEffect(() => {
-    let updatedData = initialState;
+    let data = initialState;
 
-    filters.forEach((filter) => {
-      if (filter.state !== 'Todos') {
-        updatedData = filterByProperty(
-          filter.property,
-          filter.state,
-          updatedData
-        );
-      }
-    });
+    // Apply filters
+    data = filters.reduce((filtered, filter) => {
+      return filter.state !== 'Todos'
+        ? filtered.filter((item) => item[filter.property] === filter.state)
+        : filtered;
+    }, data);
 
-    // Search filter
+    // Apply search term
     if (searchTerm) {
-      updatedData = updatedData.filter((item) => {
-        return keys.some((key) => {
-          const value = item[key];
-
-          if (typeof value === 'string') {
-            return value.toLowerCase().includes(searchTerm.toLowerCase());
-          }
-
-          return false;
-        });
-      });
+      data = data.filter((item) =>
+        keys.some((key) =>
+          item[key].toLowerCase().includes(searchTerm.toLowerCase())
+        )
+      );
     }
 
-    setFilteredData(updatedData);
+    setFilteredData(data);
   }, filterStates);
 
   return { filteredData };
