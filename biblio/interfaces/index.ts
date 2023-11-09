@@ -20,3 +20,9 @@ export interface Book {
   status: Status;
   favorite: boolean;
 }
+
+export type BookAction =
+  | { type: 'ADD_BOOK'; book: Book }
+  | { type: 'UPDATE_BOOK'; book: Book }
+  | { type: 'DELETE_BOOK'; id: string }
+  | { type: 'TOGGLE_FAVORITE'; id: string };

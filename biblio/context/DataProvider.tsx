@@ -1,13 +1,13 @@
 'use client';
 import { initialData } from '@/data';
-import { Book } from '@/interfaces';
+import { Book, BookAction } from '@/interfaces';
 import React, { useReducer, createContext, useMemo } from 'react';
 
 // Context's value type
 type DataContextType = {
   dataState: Book[];
   favorites: Book[];
-  dispatch: React.Dispatch<Action>;
+  dispatch: React.Dispatch<BookAction>;
 };
 
 export const DataContext = createContext<DataContextType>({
@@ -16,15 +16,8 @@ export const DataContext = createContext<DataContextType>({
   dispatch: () => null,
 });
 
-// Action types for the reducer
-type Action =
-  | { type: 'ADD_BOOK'; book: Book }
-  | { type: 'UPDATE_BOOK'; book: Book }
-  | { type: 'DELETE_BOOK'; id: string }
-  | { type: 'TOGGLE_FAVORITE'; id: string };
-
 // Reducer function
-function booksReducer(state: Book[], action: Action): Book[] {
+function booksReducer(state: Book[], action: BookAction): Book[] {
   switch (action.type) {
     case 'ADD_BOOK':
       return [...state, action.book];
