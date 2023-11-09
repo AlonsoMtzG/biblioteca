@@ -1,6 +1,4 @@
-import { ChangeEventHandler, Dispatch, SetStateAction } from 'react';
-
-import { categories } from '@/constants';
+import { ChangeEventHandler } from 'react';
 
 interface Props {
   value: string;
