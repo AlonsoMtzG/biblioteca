@@ -1,24 +1,29 @@
 import { useContext } from 'react';
 
-import { DataContext } from '@/context/DataProvider';
 import { FiltersContext } from '@/context/FiltersProvider';
+import { DataContext } from '@/context/DataProvider';
 
 import { statusOptions, tableColumns } from '@/constants';
-import { StatusSelect } from '@/interfaces';
+import { Book, StatusSelect } from '@/interfaces';
 import { useFilters } from '@/hooks/useFilters';
 
 import { SearchInput } from './SearchInput';
 import { FilterSelect } from './FilterSelect';
 import { FavoriteButton } from '../FavoriteButton';
 
-export const Table = () => {
-  const { dataState, setDataState } = useContext(DataContext);
+interface Props {
+  data: Book[];
+}
+
+export const Table = ({ data }: Props) => {
   const { categorySelected, statusSelected, setStatusSelected } =
     useContext(FiltersContext);
 
+  const { toggleFavorite } = useContext(DataContext);
+
   //  Filter the data based on the selected category and status
   const { filteredData, searchTerm, setSearchTerm } = useFilters(
-    dataState,
+    data,
     [
       {
         property: 'category',
@@ -32,18 +37,16 @@ export const Table = () => {
     ['name', 'id']
   );
 
-  const handleFavorite = (idx: number) => {
-    const newData = [...dataState];
-    newData[idx].favorite = !newData[idx].favorite;
-    setDataState(newData);
-  };
-
   const handleFilterChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setStatusSelected(e.target.value as StatusSelect);
   };
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
+  };
+
+  const handleToggleFavorite = (id: string) => {
+    toggleFavorite(id);
   };
 
   return (
@@ -69,7 +72,7 @@ export const Table = () => {
           </tr>
         </thead>
         <tbody>
-          {filteredData.map(({ id, name, category, status, favorite }, idx) => {
+          {filteredData.map(({ id, name, category, status, favorite }) => {
             return (
               <tr key={id} className="border-b-2 font-medium">
                 <td className="px-10 py-2 font-normal">{id}</td>
@@ -80,7 +83,7 @@ export const Table = () => {
                   <FavoriteButton
                     size={25}
                     status={favorite}
-                    onClick={() => handleFavorite(idx)}
+                    onClick={() => handleToggleFavorite(id)}
                   />
                 </td>
               </tr>
